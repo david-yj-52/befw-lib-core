@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm;
+package com.tsh.starter.befw.lib.core.data.orm.common.model;
 
 import java.time.LocalDateTime;
 
@@ -38,6 +38,5 @@ public abstract class BasicAudit {
 
 	@LastModifiedBy
 	private String modifiedBy;
-
 
 }

@@ -1,8 +1,9 @@
 package com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.tsh.starter.befw.lib.core.data.orm.common.repo.BaseJpaRepository;
+
 @Repository
-public interface GnMsgSrvConnRepo extends JpaRepository<GnMsgSrvConnModel, String> {
+public interface GnMsgSrvConnRepo extends BaseJpaRepository<GnMsgSrvConnModel, String> {
 }

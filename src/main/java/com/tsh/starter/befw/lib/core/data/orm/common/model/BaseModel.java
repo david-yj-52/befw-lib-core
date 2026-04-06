@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm;
+package com.tsh.starter.befw.lib.core.data.orm.common.model;
 
 import com.tsh.starter.befw.lib.core.data.constant.UseStatCd;
 
@@ -9,11 +9,13 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @MappedSuperclass
 @Getter
+@Setter
 public class BaseModel extends BasicAudit {
 
 	public static final String TENANT = "TENANT";

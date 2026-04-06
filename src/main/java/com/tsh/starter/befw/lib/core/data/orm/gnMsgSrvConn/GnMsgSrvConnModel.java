@@ -4,7 +4,7 @@ import org.hibernate.envers.Audited;
 
 import com.tsh.starter.befw.lib.core.constant.GlobalTableName;
 import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
-import com.tsh.starter.befw.lib.core.data.orm.BaseModel;
+import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
