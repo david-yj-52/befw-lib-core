@@ -22,8 +22,8 @@ public class BaseModel extends BasicAudit {
 	public static final String TENANT = "TENANT";
 	public static final String TRACE_ID = "TRACE_ID";
 	public static final String USE_STAT_CD = "USE_STAT_CD";
-	public static final String EVENT_NM = "USE_STAT_CD";
-	public static final String PREV_EVENT_NM = "USE_STAT_CD";
+	public static final String EVENT_NM = "EVENT_NM";
+	public static final String PREV_EVENT_NM = "PREV_EVENT_NM";
 	public static final String ACT_CM = "ACT_CM";
 	public static final String ACT_CD = "ACT_CD";
 

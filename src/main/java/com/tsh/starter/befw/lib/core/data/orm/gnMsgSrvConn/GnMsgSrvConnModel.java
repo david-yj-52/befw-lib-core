@@ -32,7 +32,7 @@ public class GnMsgSrvConnModel extends BaseModel {
 	private String env;
 	private String host;
 	private int port;
-	private String user;
+	private String conn_user;
 	private String pwd;
 	private String domain;
 
