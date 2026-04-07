@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class BaseModel extends BasicAudit {
 
+	public static final String SRV_ID = "SRV_ID";
 	public static final String TENANT = "TENANT";
 	public static final String TRACE_ID = "TRACE_ID";
 	public static final String USE_STAT_CD = "USE_STAT_CD";
@@ -25,6 +26,10 @@ public class BaseModel extends BasicAudit {
 	public static final String PREV_EVENT_NM = "USE_STAT_CD";
 	public static final String ACT_CM = "ACT_CM";
 	public static final String ACT_CD = "ACT_CD";
+
+	@NotBlank(message = "ServiceId is essential")
+	@Column(name = SRV_ID, length = 50, nullable = false)
+	private String srvId;
 
 	@NotBlank(message = "Tenant is essential")
 	@Column(name = TENANT, length = 50, nullable = false)
