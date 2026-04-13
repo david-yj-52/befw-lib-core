@@ -11,11 +11,19 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 
 @Slf4j
 @MappedSuperclass
 @Getter
 @Setter
+@FilterDef(
+	name = "tenantFilter",
+	parameters = @ParamDef(name = "tenant", type = String.class)
+)
+@Filter(name = "tenantFilter", condition = "TENANT = :tenant")
 public class BaseModel extends BasicAudit {
 
 	public static final String SRV_ID = "SRV_ID";
