@@ -21,7 +21,7 @@ import lombok.Setter;
 @Table(
 	name = GlobalTableName.GN_MSG_SRV_CONN,
 	uniqueConstraints = {
-		@UniqueConstraint(name = "uk_msg_srv", columnNames = {"ENV", "HOST", "PORT"})
+		@UniqueConstraint(name = "uk_msg_srv_conn_01", columnNames = {"ENV", "HOST", "PORT"})
 	}
 )
 @Getter
