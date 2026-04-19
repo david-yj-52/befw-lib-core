@@ -10,13 +10,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = GlobalTableName.GN_MSG_SRV_CONN)
+@Table(
+	name = GlobalTableName.GN_MSG_SRV_CONN,
+	uniqueConstraints = {
+		@UniqueConstraint(name = "uk_msg_srv_conn_01", columnNames = {"ENV", "HOST", "PORT"})
+	}
+)
 @Getter
 @Setter
 @NoArgsConstructor

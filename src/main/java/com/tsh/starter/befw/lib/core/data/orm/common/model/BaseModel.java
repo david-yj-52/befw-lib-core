@@ -1,5 +1,9 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.model;
 
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+
 import com.tsh.starter.befw.lib.core.data.constant.UseStatCd;
 
 import jakarta.persistence.Column;
@@ -20,6 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
+@FilterDef(
+	name = "tenantFilter",
+	parameters = @ParamDef(name = "tenant", type = String.class)
+)
+@Filter(name = "tenantFilter", condition = "TENANT = :tenant")
 public class BaseModel extends BasicAudit {
 
 	public static final String SRV_ID = "SRV_ID";
