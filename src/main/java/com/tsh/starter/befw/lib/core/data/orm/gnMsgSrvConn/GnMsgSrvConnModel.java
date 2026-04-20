@@ -6,6 +6,7 @@ import com.tsh.starter.befw.lib.core.constant.GlobalTableName;
 import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
 import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @Table(
 	name = GlobalTableName.GN_MSG_SRV_CONN,
 	uniqueConstraints = {
-		@UniqueConstraint(name = "uk_msg_srv_conn_01", columnNames = {"ENV", "HOST", "PORT"})
+		@UniqueConstraint(name = "uk_msg_srv_conn_01", columnNames = {"env", "sol_nm", "host", "port"})
 	}
 )
 @Getter
@@ -31,12 +32,25 @@ import lombok.experimental.SuperBuilder;
 public class GnMsgSrvConnModel extends BaseModel {
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "SOL_NM")
 	private MessagingSolutionType solNm;
+
+	@Column(name = "ENV")
 	private String env;
+
+	@Column(name = "HOST")
 	private String host;
+
+	@Column(name = "PORT")
 	private int port;
-	private String conn_user;
+
+	@Column(name = "CONN_USER")
+	private String connUser;
+
+	@Column(name = "PWD")
 	private String pwd;
+
+	@Column(name = "DOMAIN")
 	private String domain;
 
 }

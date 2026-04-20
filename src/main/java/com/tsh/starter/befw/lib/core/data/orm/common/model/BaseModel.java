@@ -1,5 +1,8 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.model;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -81,10 +84,7 @@ public class BaseModel extends BasicAudit {
 
 	public <T extends ApMessageBody> void initFromProcessVo(ApCommonProcessVo<T> procVo) {
 
-		srvId = ApplicationProperties.getApplicationServiceName();
-		tenant = procVo.getTenant();
-		traceId = procVo.getTraceId();
-		useStatCd = UseStatCd.Usable;
+		this.defaultUpdate(procVo);
 		evtNm = procVo.getEventNm();
 		prevEvntNm = ApMessageList.InitializeData;
 
@@ -92,10 +92,57 @@ public class BaseModel extends BasicAudit {
 
 	public <T extends ApMessageBody> void updateFromProcessVo(ApCommonProcessVo<T> procVo, BaseModel existing) {
 
-		prevEvntNm = evtNm;
+		this.defaultUpdate(procVo);
+		prevEvntNm = existing.getEvtNm();
 		evtNm = procVo.getEventNm();
 		traceId = procVo.getTraceId();
 
+	}
+
+	private <T extends ApMessageBody> void defaultUpdate(ApCommonProcessVo<T> procVo) {
+
+		srvId = ApplicationProperties.getApplicationServiceName();
+		tenant = procVo.getTenant();
+		traceId = procVo.getTraceId();
+		useStatCd = UseStatCd.Usable;
+
+	}
+
+	public void mergeFields(BaseModel source) {
+		Class<?> current = source.getClass();
+		while (current != null && current != Object.class) {
+			for (Field field : current.getDeclaredFields()) {
+				// static, final 필드 제외
+				if (Modifier.isStatic(field.getModifiers()) ||
+					Modifier.isFinal(field.getModifiers())) {
+					continue;
+				}
+				field.setAccessible(true);
+				try {
+					Object value = field.get(source);
+					// null이 아니고 primitive 기본값이 아닌 경우만 복사
+					if (value != null && !isDefaultPrimitive(field, value)) {
+						field.set(this, value);
+					}
+				} catch (IllegalAccessException e) {
+					log.warn("mergeFields: cannot access field {}", field.getName());
+				}
+			}
+			current = current.getSuperclass();
+		}
+	}
+
+	private boolean isDefaultPrimitive(Field field, Object value) {
+		Class<?> type = field.getType();
+		if (type == int.class || type == Integer.class)
+			return (int)value == 0;
+		if (type == long.class || type == Long.class)
+			return (long)value == 0L;
+		if (type == boolean.class || type == Boolean.class)
+			return !(boolean)value;
+		if (type == double.class || type == Double.class)
+			return (double)value == 0.0;
+		return false;
 	}
 
 	protected void onDataInsert() {

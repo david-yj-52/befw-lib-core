@@ -1,7 +1,9 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.access;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,6 +115,21 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 		}
 	}
 
+	@Transactional
+	public <T extends ApMessageBody> M upsert(ApCommonProcessVo<T> procVo, M model, String ukName) {
+		try {
+			Map<String, Object> ukParams = resolveUkParams(model, ukName); // ← 자동 추출
+			M existing = ukCrudSupport.findByUk(getEntityClass(), ukName, ukParams);
+			existing.updateFromProcessVo(procVo, existing);
+			existing.mergeFields(model);
+			return getRepository().save(existing);
+
+		} catch (EntityNotFoundException e) {
+			model.initFromProcessVo(procVo);
+			return getRepository().save(model);
+		}
+	}
+
 	@Override
 	@Transactional
 	public M create(M model) {
@@ -143,9 +160,9 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 	}
 
 	@Transactional
-	public <T extends ApMessageBody> M update(ID id, M model, ApCommonProcessVo<T> procVo) {
-		M existing = findById(id);
+	public <T extends ApMessageBody> M update(ID id, M existing, M model, ApCommonProcessVo<T> procVo) {
 		model.updateFromProcessVo(procVo, existing);
+		existing.mergeFields(model);
 		return update(id, model);
 	}
 
@@ -222,5 +239,33 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 				"deleteByUk(" + ukName + ")");
 			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
 		}
+	}
+
+	protected Map<String, Object> resolveUkParams(M model, String ukName) {
+		Map<String, String> ukColumns = ukCrudSupport.resolveUkColumns(getEntityClass(), ukName);
+		Map<String, Object> params = new HashMap<>();
+
+		ukColumns.forEach((columnName, fieldName) -> {
+			try {
+				Field field = findField(model.getClass(), fieldName);
+				field.setAccessible(true);
+				params.put(columnName, field.get(model));
+			} catch (Exception e) {
+				log.warn("Cannot resolve UK param for field: {}", fieldName);
+			}
+		});
+		return params;
+	}
+
+	private Field findField(Class<?> clazz, String fieldName) {
+		Class<?> current = clazz;
+		while (current != null && current != Object.class) {
+			try {
+				return current.getDeclaredField(fieldName);
+			} catch (NoSuchFieldException e) {
+				current = current.getSuperclass();
+			}
+		}
+		throw new IllegalArgumentException("Field not found: " + fieldName);
 	}
 }
