@@ -2,6 +2,7 @@ package com.tsh.starter.befw.lib.core.spec.in;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tsh.starter.befw.lib.core.ApMessage;
+import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
 import com.tsh.starter.befw.lib.core.spec.ApMessageBody;
 import com.tsh.starter.befw.lib.core.spec.constant.ApMessageList;
 
@@ -35,9 +36,25 @@ public class AddMsgServerInf extends ApMessage {
 
 		@NotNull(message = "필수값 누락")
 		@JsonInclude(JsonInclude.Include.ALWAYS)
-		private String solNm;
+		private MessagingSolutionType solNm;
 
+		@NotNull(message = "필수값 누락")
 		private String conUserId;
+
+		@NotNull(message = "필수값 누락")
+		private String pwd;
+		
+		@NotNull(message = "필수값 누락")
+		private String domain;
+
+		@NotNull(message = "필수값 누락")
+		private String env;
+
+		@NotNull(message = "필수값 누락")
+		private String host;
+
+		@NotNull(message = "필수값 누락")
+		private int port;
 	}
 
 }
