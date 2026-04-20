@@ -1,43 +1,70 @@
 package com.tsh.starter.befw.lib.core.messaging.solace;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
+import com.tsh.starter.befw.lib.core.data.constant.UseYn;
+import com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn.GnMsgSrvConnModel;
+import com.tsh.starter.befw.lib.core.messaging.AbstractMessageSessionManager;
+import com.tsh.starter.befw.lib.core.messaging.MessagingConfManager;
 
-import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
-import com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn.GnMsgSrvConnAccess;
-
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
-public class SolaceSessionManager {
+public class SolaceSessionManager extends AbstractMessageSessionManager {
 
-	public static final MessagingSolutionType solType = MessagingSolutionType.Solace;
+	private List<GnMsgSrvConnModel> connectionInfos;
+	private ConcurrentHashMap<String, SolaceSessionHandler> handlerMap;
 
-	@Autowired
-	GnMsgSrvConnAccess gnMsgSrvConnAccess;
+	public SolaceSessionManager(List<GnMsgSrvConnModel> infos) {
 
-	@Value("${application.module-name}")
-	private String applicationModuleName;
-	@Value("${application.version}")
-	private String applicationVersion;
-	@Value("${application.service-name}")
-	private String applicationServiceName;
-	@Value("${application.tenant}")
-	private String tenant;
+		log.info("groupId: {}, service:{}, version:{}", ApplicationProperties.getApplicationModuleName(),
+			ApplicationProperties.getApplicationServiceName(), ApplicationProperties.getApplicationVersion());
 
-	private ConcurrentHashMap<String, SolaceSessionHandler> sessionMap;
+		this.connectionInfos = infos;
 
-	@PostConstruct
-	public void init() {
-
-		log.info("groupId: {}, service:{}, version:{}", applicationModuleName, applicationServiceName,
-			applicationVersion);
-		sessionMap = new ConcurrentHashMap<>();
+		this.startSession();
 	}
 
+	@Override
+	protected void startSession() {
+		log.info("start session generate.");
+		this.generateHandler();
+
+	}
+
+	@Override
+	protected void stopSession() {
+
+	}
+
+	@Override
+	protected void checkSession() {
+
+		boolean isDefaultClosed = this.handlerMap.get(MessagingConfManager.DEFAULT_KEY).getSession().isClosed();
+		log.info("isDefaultClosed: {}", isDefaultClosed);
+
+	}
+
+	private void generateHandler() {
+		log.info("generate connection vo.");
+
+		for (GnMsgSrvConnModel model : connectionInfos) {
+
+			String key = this.generateSessionKey(model);
+			SolaceSessionHandler handler = new SolaceSessionHandler(new SolacePropertyHandler(model));
+			this.handlerMap.put(key, handler);
+
+		}
+	}
+
+	private String generateSessionKey(GnMsgSrvConnModel model) {
+		if (UseYn.Y.equals(model.getDefaultYn())) {
+			return MessagingConfManager.DEFAULT_KEY;
+		} else {
+			return model.getEnv() + "|" + model.getDomain();
+		}
+
+	}
 }

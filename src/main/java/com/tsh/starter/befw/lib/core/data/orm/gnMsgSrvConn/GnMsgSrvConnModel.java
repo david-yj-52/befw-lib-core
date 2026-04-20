@@ -4,6 +4,7 @@ import org.hibernate.envers.Audited;
 
 import com.tsh.starter.befw.lib.core.constant.GlobalTableName;
 import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
+import com.tsh.starter.befw.lib.core.data.constant.UseYn;
 import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
 
 import jakarta.persistence.Column;
@@ -52,5 +53,9 @@ public class GnMsgSrvConnModel extends BaseModel {
 
 	@Column(name = "DOMAIN")
 	private String domain;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "DEFAULT_YN", length = 1, nullable = false)
+	private UseYn defaultYn = UseYn.N;
 
 }

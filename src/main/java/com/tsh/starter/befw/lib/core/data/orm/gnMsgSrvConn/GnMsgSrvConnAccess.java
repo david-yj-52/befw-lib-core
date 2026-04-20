@@ -1,8 +1,11 @@
 package com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tsh.starter.befw.lib.core.data.constant.UseStatCd;
 import com.tsh.starter.befw.lib.core.data.orm.common.access.AbstractCrudService;
 import com.tsh.starter.befw.lib.core.data.orm.common.repo.BaseJpaRepository;
 
@@ -18,6 +21,10 @@ public class GnMsgSrvConnAccess extends AbstractCrudService<GnMsgSrvConnModel, S
 	@Override
 	protected BaseJpaRepository<GnMsgSrvConnModel, String> getRepository() {
 		return repo;
+	}
+
+	public List<GnMsgSrvConnModel> findByTenantAndEnv(String tenant, String env) {
+		return this.repo.findByTenantAndEnvAndUseStatCd(tenant, env, UseStatCd.Usable);
 	}
 
 }
