@@ -3,8 +3,13 @@ package com.tsh.starter.befw.lib.core.data.orm.common.model;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
+import org.hibernate.envers.Audited;
 
+import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
 import com.tsh.starter.befw.lib.core.data.constant.UseStatCd;
+import com.tsh.starter.befw.lib.core.spec.ApMessageBody;
+import com.tsh.starter.befw.lib.core.spec.constant.ApMessageList;
+import com.tsh.starter.befw.lib.core.spec.process.ApCommonProcessVo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -12,6 +17,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PreUpdate;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @NoArgsConstructor
+@Audited
 @SuperBuilder
 @FilterDef(
 	name = "tenantFilter",
@@ -35,8 +42,8 @@ public class BaseModel extends BasicAudit {
 	public static final String TENANT = "TENANT";
 	public static final String TRACE_ID = "TRACE_ID";
 	public static final String USE_STAT_CD = "USE_STAT_CD";
-	public static final String EVENT_NM = "EVENT_NM";
-	public static final String PREV_EVENT_NM = "PREV_EVENT_NM";
+	public static final String EVNT_NM = "EVNT_NM";
+	public static final String PREV_EVNT_NMM = "PREV_EVNT_NM";
 	public static final String ACT_CM = "ACT_CM";
 	public static final String ACT_CD = "ACT_CD";
 
@@ -56,19 +63,40 @@ public class BaseModel extends BasicAudit {
 	@Enumerated(EnumType.STRING)
 	private UseStatCd useStatCd;
 
-	@NotBlank(message = "EventName is essential")
-	@Column(name = EVENT_NM, length = 100, nullable = false)
-	private String evetNm;
+	@NotNull(message = "EventName is essential")
+	@Column(name = EVNT_NM, length = 100, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private ApMessageList evtNm;
 
-	@NotBlank(message = "Previous eventName is essential")
-	@Column(name = PREV_EVENT_NM, length = 100, nullable = false)
-	private String prevEventNm;
+	@NotNull(message = "Previous eventName is essential")
+	@Column(name = PREV_EVNT_NMM, length = 100, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private ApMessageList prevEvntNm;
 
 	@Column(name = ACT_CM)
 	private String actCm;
 
 	@Column(name = ACT_CD)
 	private String actCd;
+
+	public <T extends ApMessageBody> void initFromProcessVo(ApCommonProcessVo<T> procVo) {
+
+		srvId = ApplicationProperties.getApplicationServiceName();
+		tenant = procVo.getTenant();
+		traceId = procVo.getTraceId();
+		useStatCd = UseStatCd.Usable;
+		evtNm = procVo.getEventNm();
+		prevEvntNm = ApMessageList.InitializeData;
+
+	}
+
+	public <T extends ApMessageBody> void updateFromProcessVo(ApCommonProcessVo<T> procVo, BaseModel existing) {
+
+		prevEvntNm = evtNm;
+		evtNm = procVo.getEventNm();
+		traceId = procVo.getTraceId();
+
+	}
 
 	protected void onDataInsert() {
 

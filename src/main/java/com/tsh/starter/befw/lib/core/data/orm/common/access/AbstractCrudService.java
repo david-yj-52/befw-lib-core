@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.tsh.starter.befw.lib.core.data.constant.UseStatCd;
 import com.tsh.starter.befw.lib.core.data.orm.common.error.DataErrorResponse;
 import com.tsh.starter.befw.lib.core.data.orm.common.error.JpaExceptionHandler;
@@ -13,14 +16,14 @@ import com.tsh.starter.befw.lib.core.data.orm.common.repo.BaseJpaRepository;
 import com.tsh.starter.befw.lib.core.data.orm.common.tenant.TenantContext;
 import com.tsh.starter.befw.lib.core.data.orm.common.uk.UkCrudService;
 import com.tsh.starter.befw.lib.core.data.orm.common.uk.UkCrudSupport;
+import com.tsh.starter.befw.lib.core.spec.ApMessageBody;
+import com.tsh.starter.befw.lib.core.spec.process.ApCommonProcessVo;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
 public abstract class AbstractCrudService<M extends BaseModel, ID>
@@ -39,8 +42,8 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 
 	@SuppressWarnings("unchecked")
 	protected Class<M> getEntityClass() {
-		ParameterizedType type = (ParameterizedType) getClass().getGenericSuperclass();
-		return (Class<M>) type.getActualTypeArguments()[0];
+		ParameterizedType type = (ParameterizedType)getClass().getGenericSuperclass();
+		return (Class<M>)type.getActualTypeArguments()[0];
 	}
 
 	protected String getEntityName() {
@@ -82,7 +85,8 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 			enableTenantFilter();
 			return getRepository().findRecentlyUpdated(tenant, UseStatCd.Usable, since);
 		} catch (Exception e) {
-			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), tenant, "findAll(since=" + since + ")");
+			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), tenant,
+				"findAll(since=" + since + ")");
 			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
 		}
 	}
@@ -113,11 +117,18 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 	@Transactional
 	public M create(M model) {
 		try {
-			return getRepository().save(model);
+			return getRepository().saveAndFlush(model);
 		} catch (Exception e) {
 			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), model, "create");
 			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
 		}
+	}
+
+	// procVo 오버로드 - 메서드 레벨 제네릭으로 선언
+	@Transactional
+	public <T extends ApMessageBody> M create(M model, ApCommonProcessVo<T> procVo) {
+		model.initFromProcessVo(procVo);
+		return create(model);  // 기존 create 재사용
 	}
 
 	@Override
@@ -129,6 +140,13 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), id, "update");
 			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
 		}
+	}
+
+	@Transactional
+	public <T extends ApMessageBody> M update(ID id, M model, ApCommonProcessVo<T> procVo) {
+		M existing = findById(id);
+		model.updateFromProcessVo(procVo, existing);
+		return update(id, model);
 	}
 
 	@Override
@@ -152,7 +170,8 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 			enableTenantFilter();
 			return ukCrudSupport.findByUk(getEntityClass(), ukName, params);
 		} catch (Exception e) {
-			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), params, "findByUk(" + ukName + ")");
+			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), params,
+				"findByUk(" + ukName + ")");
 			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
 		}
 	}
@@ -167,7 +186,25 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 			ukCrudSupport.copyNonNullFields(model, existing, ukColumns);
 			return getRepository().save(existing);
 		} catch (Exception e) {
-			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), params, "updateByUk(" + ukName + ")");
+			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), params,
+				"updateByUk(" + ukName + ")");
+			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
+		}
+	}
+
+	@Transactional
+	public <T extends ApMessageBody> M updateByUk(String ukName, Map<String, Object> params, M model,
+		ApCommonProcessVo<T> procVo) {
+		try {
+			enableTenantFilter();
+			M existing = ukCrudSupport.findByUk(getEntityClass(), ukName, params);
+			Map<String, String> ukColumns = ukCrudSupport.resolveUkColumns(getEntityClass(), ukName);
+			model.updateFromProcessVo(procVo, existing);
+			ukCrudSupport.copyNonNullFields(model, existing, ukColumns);
+			return getRepository().save(existing);
+		} catch (Exception e) {
+			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), params,
+				"updateByUk(" + ukName + ")");
 			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
 		}
 	}
@@ -181,7 +218,8 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 			existing.setUseStatCd(UseStatCd.Delete);   // Soft Delete
 			getRepository().save(existing);
 		} catch (Exception e) {
-			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), params, "deleteByUk(" + ukName + ")");
+			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), params,
+				"deleteByUk(" + ukName + ")");
 			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
 		}
 	}

@@ -22,7 +22,7 @@ public abstract class ApCommonProcessVo<T extends ApMessageBody> {
 	String userId;
 	String traceId;
 
-	ApMessageVo<?> receiveMsgInfo;
+	ApMessageVo<T> receiveMsgInfo;
 	ArrayList<ApMessageVo<?>> sendMsgInfoList;
 
 	protected void initCommon(InterfaceType interfaceType, ApMessage ivo, T body) {
