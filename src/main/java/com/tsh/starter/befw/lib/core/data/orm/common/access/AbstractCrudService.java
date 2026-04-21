@@ -193,6 +193,18 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 		}
 	}
 
+	public M findByUk(String ukName, M model) {
+		try {
+			enableTenantFilter();
+			Map<String, Object> ukParams = resolveUkParams(model, ukName);
+			return ukCrudSupport.findByUk(getEntityClass(), ukName, ukParams);
+		} catch (Exception e) {
+			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), "UDF",
+				"findByUk(" + ukName + ")");
+			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
+		}
+	}
+
 	@Override
 	@Transactional
 	public M updateByUk(String ukName, Map<String, Object> params, M model) {

@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.messaging.solace;
+package com.tsh.starter.befw.lib.core.messaging.solace.config;
 
 import com.solacesystems.jcsmp.InvalidPropertiesException;
 import com.solacesystems.jcsmp.JCSMPException;

@@ -3,6 +3,7 @@ package com.tsh.starter.befw.lib.core.spec.in;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tsh.starter.befw.lib.core.ApMessage;
 import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
+import com.tsh.starter.befw.lib.core.data.constant.UseYn;
 import com.tsh.starter.befw.lib.core.spec.ApMessageBody;
 import com.tsh.starter.befw.lib.core.spec.constant.ApMessageList;
 
@@ -43,7 +44,7 @@ public class AddMsgServerInf extends ApMessage {
 
 		@NotNull(message = "필수값 누락")
 		private String pwd;
-		
+
 		@NotNull(message = "필수값 누락")
 		private String domain;
 
@@ -55,6 +56,9 @@ public class AddMsgServerInf extends ApMessage {
 
 		@NotNull(message = "필수값 누락")
 		private int port;
+
+		@NotNull(message = "필수값 누락")
+		private UseYn defaultYn;
 	}
 
 }

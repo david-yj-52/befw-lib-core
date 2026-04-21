@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.messaging.solace;
+package com.tsh.starter.befw.lib.core.messaging.solace.config;
 
 import com.solacesystems.jcsmp.JCSMPChannelProperties;
 import com.solacesystems.jcsmp.JCSMPProperties;
@@ -7,10 +7,13 @@ import com.tsh.starter.befw.lib.core.apService.util.ServerNameUtil;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
 import com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn.GnMsgSrvConnModel;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SolacePropertyHandler {
+
+	public static final String SEMP_PREFIX = "SEMP_";
 
 	public static final int DEFAULT_CH_CONNECT_TIME_OUT = 1000;
 	public static final int DEFAULT_CH_CONNECT_RETRIES = 1;
@@ -18,10 +21,25 @@ public class SolacePropertyHandler {
 	public static final int DEFAULT_CH_RE_CONNECT_RETRIES = 1;
 	public static final int DEFAULT_CH_RE_CONNECT_RETRY_IN_MILLIS = 1000;
 
+	public static final int DEFAULT_SEMP_PORT = 9999;
+
+	@Getter
+	String clientName;
+	@Getter
+	String sempClientName;
+
+	@Getter
+	String sempUrl;
+
+	@Getter
 	GnMsgSrvConnModel model;
+
 	Object solaceModel;    // TODO 추후 별도 테이블로 정의
 
+	@Getter
 	JCSMPProperties properties;
+
+	@Getter
 	JCSMPChannelProperties channelProperties;
 
 	public SolacePropertyHandler(GnMsgSrvConnModel model) {
@@ -33,10 +51,12 @@ public class SolacePropertyHandler {
 	public SolacePropertyHandler(GnMsgSrvConnModel model, Object solaceModel) {
 		this.model = model;
 		this.buildJcsmpProperties();
+		this.sempUrl = "http://" + model.getHost() + ":" + DEFAULT_SEMP_PORT;
 
 	}
 
 	private void buildJcsmpProperties() {
+
 		JCSMPProperties p = new JCSMPProperties();
 
 		p.setProperty(JCSMPProperties.HOST, model.getHost() + ":" + model.getPort());
@@ -72,11 +92,16 @@ public class SolacePropertyHandler {
 		String format = "%s-%s-%s-%s-%s";
 		String hostName = ServerNameUtil.getHostName();
 
-		String clientName = String.format(format, ApplicationProperties.getApplicationTenant(),
+		String name = String.format(format, ApplicationProperties.getApplicationTenant(),
 			ApplicationProperties.getApplicationServiceName(), ApplicationProperties.getApplicationVersion(),
 			hostName, DateTimeUtil.getServerSecondTime());
 		log.info("clientName: {}", clientName);
-		return clientName;
+
+		clientName = name;
+		sempClientName = SEMP_PREFIX + clientName;
+
+		return name;
+
 	}
 
 }

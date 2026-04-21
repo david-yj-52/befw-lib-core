@@ -1,8 +1,9 @@
-package com.tsh.starter.befw.lib.core.messaging.solace;
+package com.tsh.starter.befw.lib.core.messaging.solace.config;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.solacesystems.jcsmp.JCSMPSession;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
 import com.tsh.starter.befw.lib.core.data.constant.UseYn;
 import com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn.GnMsgSrvConnModel;
@@ -22,9 +23,18 @@ public class SolaceSessionManager extends AbstractMessageSessionManager {
 		log.info("groupId: {}, service:{}, version:{}", ApplicationProperties.getApplicationModuleName(),
 			ApplicationProperties.getApplicationServiceName(), ApplicationProperties.getApplicationVersion());
 
+		this.handlerMap = new ConcurrentHashMap<>();
 		this.connectionInfos = infos;
 
 		this.startSession();
+	}
+
+	public JCSMPSession getSession(String key) {
+		return this.handlerMap.get(key).getSession();
+	}
+
+	public SolaceSessionHandler getHandler(String key) {
+		return this.handlerMap.get(key);
 	}
 
 	@Override
@@ -53,7 +63,10 @@ public class SolaceSessionManager extends AbstractMessageSessionManager {
 		for (GnMsgSrvConnModel model : connectionInfos) {
 
 			String key = this.generateSessionKey(model);
+
+			log.info("generated key: {}, model:{}", key, model.toString()); // ← 키 찍어보기
 			SolaceSessionHandler handler = new SolaceSessionHandler(new SolacePropertyHandler(model));
+			handler.startSession();
 			this.handlerMap.put(key, handler);
 
 		}

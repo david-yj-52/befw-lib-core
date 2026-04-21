@@ -13,6 +13,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @Table(
 	name = GlobalTableName.GN_MSG_SRV_CONN,
 	uniqueConstraints = {
-		@UniqueConstraint(name = "uk_msg_srv_conn_01", columnNames = {"env", "sol_nm", "host", "port"})
+		@UniqueConstraint(name = GnMsgSrvConnModel.UK01, columnNames = {"env", "sol_nm", "host", "port"})
 	}
 )
 @Getter
@@ -31,6 +32,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Audited    // History 자동 생성을 위함
 public class GnMsgSrvConnModel extends BaseModel {
+	public static final String UK01 = "uk_msg_srv_conn_01";
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "SOL_NM")
@@ -54,6 +56,7 @@ public class GnMsgSrvConnModel extends BaseModel {
 	@Column(name = "DOMAIN")
 	private String domain;
 
+	@Builder.Default
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DEFAULT_YN", length = 1, nullable = false)
 	private UseYn defaultYn = UseYn.N;
