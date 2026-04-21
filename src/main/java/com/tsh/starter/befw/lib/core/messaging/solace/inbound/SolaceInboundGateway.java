@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.messaging.solace;
+package com.tsh.starter.befw.lib.core.messaging.solace.inbound;
 
 import java.util.List;
 import java.util.Map;

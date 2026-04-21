@@ -23,6 +23,12 @@ public class SolacePropertyHandler {
 
 	public static final int DEFAULT_SEMP_PORT = 9999;
 
+	// TODO 발송 관련 solace 전용 property 이동 필요
+	public static String OUT_BOUND_DEAD_QUEUE_NAME = "befw.dead.letter.queue";
+
+	// TODO 발송 관련 solace 전용 property 이동 필요
+	public static int OUT_BOUND_RETRY_CNT = 3;
+
 	@Getter
 	String clientName;
 	@Getter
