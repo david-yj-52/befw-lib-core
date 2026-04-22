@@ -117,7 +117,7 @@ public class SolaceInboundGateway {
 						} catch (Exception e) {
 							log.error("[Solace] Processing failed — queue: {}, redelivered: {}",
 								queueName, message.getRedelivered(), e);
-							// ✅ ACK 하지 않음 → Solace 재전송
+							message.ackMessage(); // ✅ 처리 완료 후 ACK → Broker 다음 메시지 전송
 							receiver.onException((JCSMPException)
 								(e instanceof JCSMPException ? e
 									: new JCSMPException(e.getMessage())));

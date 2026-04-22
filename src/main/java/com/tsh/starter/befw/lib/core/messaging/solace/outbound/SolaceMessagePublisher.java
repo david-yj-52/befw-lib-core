@@ -87,6 +87,10 @@ public class SolaceMessagePublisher {
 	private SDTMap buildSdtMap(Map<String, Object> msgProp) throws JCSMPException {
 		SDTMap sdtMap = JCSMPFactory.onlyInstance().createMap();
 
+		if (msgProp == null) {
+			return null;
+		}
+
 		for (Map.Entry<String, Object> entry : msgProp.entrySet()) {
 			String key = entry.getKey();
 			Object value = entry.getValue();

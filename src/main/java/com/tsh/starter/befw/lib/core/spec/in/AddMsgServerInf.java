@@ -22,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true)
 public class AddMsgServerInf extends ApMessage {
 
-	public static final ApMessageList eventNm = ApMessageList.AddMsgServerInfoIvo;
+	public static final ApMessageList eventNm = ApMessageList.AddMsgServerInfo;
 
 	@Valid
 	@NotNull(message = "body는 필수값입니다.")

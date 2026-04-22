@@ -68,13 +68,11 @@ public class BaseModel extends BasicAudit {
 
 	@NotNull(message = "EventName is essential")
 	@Column(name = EVNT_NM, length = 100, nullable = false)
-	@Enumerated(EnumType.STRING)
-	private ApMessageList evtNm;
+	private String evtNm;
 
 	@NotNull(message = "Previous eventName is essential")
 	@Column(name = PREV_EVNT_NMM, length = 100, nullable = false)
-	@Enumerated(EnumType.STRING)
-	private ApMessageList prevEvntNm;
+	private String prevEvntNm;
 
 	@Column(name = ACT_CM)
 	private String actCm;
@@ -85,8 +83,8 @@ public class BaseModel extends BasicAudit {
 	public <T extends ApMessageBody> void initFromProcessVo(ApCommonProcessVo<T> procVo) {
 
 		this.defaultUpdate(procVo);
-		evtNm = procVo.getEventNm();
-		prevEvntNm = ApMessageList.InitializeData;
+		evtNm = String.valueOf(procVo.getEventNm());
+		prevEvntNm = String.valueOf(ApMessageList.InitializeData);
 
 	}
 
@@ -94,7 +92,7 @@ public class BaseModel extends BasicAudit {
 
 		this.defaultUpdate(procVo);
 		prevEvntNm = existing.getEvtNm();
-		evtNm = procVo.getEventNm();
+		evtNm = String.valueOf(procVo.getEventNm());
 		traceId = procVo.getTraceId();
 
 	}
