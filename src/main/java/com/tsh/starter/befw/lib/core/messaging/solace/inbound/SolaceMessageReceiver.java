@@ -1,5 +1,7 @@
 package com.tsh.starter.befw.lib.core.messaging.solace.inbound;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.solacesystems.jcsmp.BytesXMLMessage;
@@ -57,11 +59,30 @@ public interface SolaceMessageReceiver {
 	 * 메시지 payload를 String으로 추출하는 유틸 메서드입니다.
 	 */
 	default String extractPayload(BytesXMLMessage message) {
+		// 1. TextMessage 처리 (JMS 호환 텍스트 메시지)
 		if (message instanceof TextMessage textMessage) {
 			return textMessage.getText();
 		}
-		byte[] bytes = message.getBytes();
-		return bytes != null ? new String(bytes) : null;
+
+		// 2. Attachment 영역 확인 (가장 일반적)
+		if (message.hasAttachment()) {
+			ByteBuffer buf = message.getAttachmentByteBuffer();
+			if (buf != null && buf.hasRemaining()) {
+				byte[] bytes = new byte[buf.remaining()];
+				buf.get(bytes);
+				return new String(bytes, StandardCharsets.UTF_8);
+			}
+		}
+
+		// 3. XML Content 영역 확인 (fallback) → getBytes() 사용
+		if (message.hasContent()) {
+			byte[] xmlBytes = message.getBytes();
+			if (xmlBytes != null && xmlBytes.length > 0) {
+				return new String(xmlBytes, StandardCharsets.UTF_8);
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -86,7 +107,7 @@ public interface SolaceMessageReceiver {
 	default EndpointProperties getEndpointProperties() {
 		EndpointProperties props = new EndpointProperties();
 		props.setPermission(EndpointProperties.PERMISSION_CONSUME);
-		props.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
+		props.setAccessType(EndpointProperties.ACCESSTYPE_NONEXCLUSIVE);
 		return props;
 	}
 
