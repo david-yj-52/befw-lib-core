@@ -4,4 +4,8 @@ public enum ApMessageList {
 
 	InitializeData,
 	AddMsgServerInfo,
+	HealthCheckReq,
+	HealthCheckRep,
+	HealthCheckTriggerReq,
+	HealthCheckTriggerRep,
 }
