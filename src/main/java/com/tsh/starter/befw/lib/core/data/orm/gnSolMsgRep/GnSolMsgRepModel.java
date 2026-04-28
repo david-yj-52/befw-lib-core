@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm.GnSolMsgRep;
+package com.tsh.starter.befw.lib.core.data.orm.gnSolMsgRep;
 
 import org.hibernate.envers.Audited;
 
