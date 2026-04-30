@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.solacesystems.jcsmp.JCSMPSession;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
 import com.tsh.starter.befw.lib.core.data.constant.UseYn;
-import com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn.GnMsgSrvConnModel;
+import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn.GsMsgSrvConnModel;
 import com.tsh.starter.befw.lib.core.messaging.AbstractMessageSessionManager;
 import com.tsh.starter.befw.lib.core.messaging.MessagingConfManager;
 
@@ -15,10 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SolaceSessionManager extends AbstractMessageSessionManager {
 
-	private List<GnMsgSrvConnModel> connectionInfos;
+	private List<GsMsgSrvConnModel> connectionInfos;
 	private ConcurrentHashMap<String, SolaceSessionHandler> handlerMap;
 
-	public SolaceSessionManager(List<GnMsgSrvConnModel> infos) {
+	public SolaceSessionManager(List<GsMsgSrvConnModel> infos) {
 
 		log.info("groupId: {}, service:{}, version:{}", ApplicationProperties.getApplicationModuleName(),
 			ApplicationProperties.getApplicationServiceName(), ApplicationProperties.getApplicationVersion());
@@ -60,7 +60,7 @@ public class SolaceSessionManager extends AbstractMessageSessionManager {
 	private void generateHandler() {
 		log.info("generate connection vo.");
 
-		for (GnMsgSrvConnModel model : connectionInfos) {
+		for (GsMsgSrvConnModel model : connectionInfos) {
 
 			String key = this.generateSessionKey(model);
 
@@ -72,7 +72,7 @@ public class SolaceSessionManager extends AbstractMessageSessionManager {
 		}
 	}
 
-	private String generateSessionKey(GnMsgSrvConnModel model) {
+	private String generateSessionKey(GsMsgSrvConnModel model) {
 		if (UseYn.Y.equals(model.getDefaultYn())) {
 			return MessagingConfManager.DEFAULT_KEY;
 		} else {

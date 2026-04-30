@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm.gnSolMsgRep;
+package com.tsh.starter.befw.lib.core.data.orm.messageReply.gnSolMsgRep;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,13 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class GnSolMsgRepAccess extends AbstractCrudService<GnSolMsgRepModel, String> {
+public class GsSolMsgRepAccess extends AbstractCrudService<GsSolMsgRepModel, String> {
 
 	@Autowired
-	GnSolMsgRepRepo repo;
+	GsSolMsgRepRepo repo;
 
 	@Override
-	protected BaseJpaRepository<GnSolMsgRepModel, String> getRepository() {
+	protected BaseJpaRepository<GsSolMsgRepModel, String> getRepository() {
 		return repo;
 	}
 }

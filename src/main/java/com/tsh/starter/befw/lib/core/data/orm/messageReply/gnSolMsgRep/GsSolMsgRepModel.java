@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm.gnSolMsgRep;
+package com.tsh.starter.befw.lib.core.data.orm.messageReply.gnSolMsgRep;
 
 import org.hibernate.envers.Audited;
 
@@ -20,9 +20,9 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(
-	name = GlobalTableName.GN_SOL_MSG_REP,
+	name = GlobalTableName.GS_SOL_MSG_REP,
 	uniqueConstraints = {
-		@UniqueConstraint(name = GnSolMsgRepModel.UK01, columnNames = {"reqSrvNm", "reqTraceId"})
+		@UniqueConstraint(name = GsSolMsgRepModel.UK01, columnNames = {"reqSrvNm", "reqTraceId"})
 	}
 )
 @Getter
@@ -30,7 +30,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Audited
-public class GnSolMsgRepModel extends BaseModel {
+public class GsSolMsgRepModel extends BaseModel {
 
 	public static final String UK01 = "uk_sol_msg_rep_01";
 

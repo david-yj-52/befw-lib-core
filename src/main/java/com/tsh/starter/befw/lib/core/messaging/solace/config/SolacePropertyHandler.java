@@ -5,7 +5,7 @@ import com.solacesystems.jcsmp.JCSMPProperties;
 import com.tsh.starter.befw.lib.core.apService.util.DateTimeUtil;
 import com.tsh.starter.befw.lib.core.apService.util.ServerNameUtil;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
-import com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn.GnMsgSrvConnModel;
+import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn.GsMsgSrvConnModel;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class SolacePropertyHandler {
 	String sempUrl;
 
 	@Getter
-	GnMsgSrvConnModel model;
+	GsMsgSrvConnModel model;
 
 	Object solaceModel;    // TODO 추후 별도 테이블로 정의
 
@@ -48,13 +48,13 @@ public class SolacePropertyHandler {
 	@Getter
 	JCSMPChannelProperties channelProperties;
 
-	public SolacePropertyHandler(GnMsgSrvConnModel model) {
+	public SolacePropertyHandler(GsMsgSrvConnModel model) {
 
 		// TODO solaceModel은 Solace 전용 설정을 별도 테이블로 조회한 응답을 전달해야함. 추후 개발 현재는 DEFAULT로
 		this(model, null);
 	}
 
-	public SolacePropertyHandler(GnMsgSrvConnModel model, Object solaceModel) {
+	public SolacePropertyHandler(GsMsgSrvConnModel model, Object solaceModel) {
 		this.model = model;
 		this.buildJcsmpProperties();
 		this.sempUrl = "http://" + model.getHost() + ":" + DEFAULT_SEMP_PORT;

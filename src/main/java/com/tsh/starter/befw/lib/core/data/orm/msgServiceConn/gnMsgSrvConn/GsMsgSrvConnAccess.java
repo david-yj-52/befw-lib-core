@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn;
+package com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn;
 
 import java.util.List;
 
@@ -13,17 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class GnMsgSrvConnAccess extends AbstractCrudService<GnMsgSrvConnModel, String> {
+public class GsMsgSrvConnAccess extends AbstractCrudService<GsMsgSrvConnModel, String> {
 
 	@Autowired
-	GnMsgSrvConnRepo repo;
+	GsMsgSrvConnRepo repo;
 
 	@Override
-	protected BaseJpaRepository<GnMsgSrvConnModel, String> getRepository() {
+	protected BaseJpaRepository<GsMsgSrvConnModel, String> getRepository() {
 		return repo;
 	}
 
-	public List<GnMsgSrvConnModel> findByTenantAndEnv(String tenant, String env) {
+	public List<GsMsgSrvConnModel> findByTenantAndEnv(String tenant, String env) {
 		return this.repo.findByTenantAndEnvAndUseStatCd(tenant, env, UseStatCd.Usable);
 	}
 

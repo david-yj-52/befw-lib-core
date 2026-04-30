@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 import com.solacesystems.jcsmp.JCSMPSession;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
 import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
-import com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn.GnMsgSrvConnAccess;
-import com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn.GnMsgSrvConnModel;
+import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn.GsMsgSrvConnAccess;
+import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn.GsMsgSrvConnModel;
 import com.tsh.starter.befw.lib.core.messaging.kafka.KafkaSessionManager;
 import com.tsh.starter.befw.lib.core.messaging.solace.config.SolaceSessionHandler;
 import com.tsh.starter.befw.lib.core.messaging.solace.config.SolaceSessionManager;
@@ -25,7 +25,7 @@ public class MessagingConfManager {
 	public static final String DEFAULT_KEY = "DEFAULT";
 
 	@Autowired
-	GnMsgSrvConnAccess gnMsgSrvConnAccess;
+	GsMsgSrvConnAccess gsMsgSrvConnAccess;
 
 	@Getter
 	SolaceSessionManager solaceSessionManager;
@@ -39,7 +39,7 @@ public class MessagingConfManager {
 		log.info("groupId: {}, service:{}, version:{}", ApplicationProperties.getApplicationModuleName(),
 			ApplicationProperties.getApplicationServiceName(), ApplicationProperties.getApplicationVersion());
 
-		List<GnMsgSrvConnModel> msgServerInfos = this.fetchMsgServerList();
+		List<GsMsgSrvConnModel> msgServerInfos = this.fetchMsgServerList();
 
 		if (msgServerInfos == null || msgServerInfos.isEmpty()) {
 			throw new NullPointerException("Not found messaging server info");
@@ -67,26 +67,26 @@ public class MessagingConfManager {
 		return handler;
 	}
 
-	private List<GnMsgSrvConnModel> fetchMsgServerList() {
+	private List<GsMsgSrvConnModel> fetchMsgServerList() {
 
-		List<GnMsgSrvConnModel> infos = this.gnMsgSrvConnAccess.findByTenantAndEnv(
+		List<GsMsgSrvConnModel> infos = this.gsMsgSrvConnAccess.findByTenantAndEnv(
 			ApplicationProperties.getApplicationTenant(), ApplicationProperties.getApplicationEnv());
 
 		return infos;
 
 	}
 
-	private void setSolaceManage(List<GnMsgSrvConnModel> infos) {
+	private void setSolaceManage(List<GsMsgSrvConnModel> infos) {
 
-		List<GnMsgSrvConnModel> solaceList = infos.stream()
+		List<GsMsgSrvConnModel> solaceList = infos.stream()
 			.filter(m -> m.getSolNm() == MessagingSolutionType.Solace)
 			.toList();
 
 		this.solaceSessionManager = new SolaceSessionManager(solaceList);
 	}
 
-	private void setKafkaManage(List<GnMsgSrvConnModel> infos) {
-		List<GnMsgSrvConnModel> kafkaList = infos.stream()
+	private void setKafkaManage(List<GsMsgSrvConnModel> infos) {
+		List<GsMsgSrvConnModel> kafkaList = infos.stream()
 			.filter(m -> m.getSolNm() == MessagingSolutionType.Kafka)
 			.toList();
 		this.kafkaSessionManager = new KafkaSessionManager(kafkaList);

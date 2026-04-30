@@ -1,9 +1,10 @@
 package com.tsh.starter.befw.lib.core.constant;
 
+/**
+ * Global Application Table Prefix: GS (Global Server)
+ */
 public class GlobalTableName {
 
-	public static final String GN_MSG_SRV_CONN = "GN_MSG_SRV_CONN";
-	public static final String GN_SOL_MSG_REP = "GN_SOL_MSG_REP";
-	public static final String GN_MPT_ROLE_DEF = "GN_MPT_ROLE_DEF";
-	public static final String GN_MPT_TMPL_INSTR = "GN_MPT_TMPL_INSTR";
+	public static final String GS_MSG_SRV_CONN = "GS_MSG_SRV_CONN";
+	public static final String GS_SOL_MSG_REP = "GS_SOL_MSG_REP";
 }

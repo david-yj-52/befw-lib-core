@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm.gnMsgSrvConn;
+package com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn;
 
 import org.hibernate.envers.Audited;
 
@@ -21,9 +21,9 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(
-	name = GlobalTableName.GN_MSG_SRV_CONN,
+	name = GlobalTableName.GS_MSG_SRV_CONN,
 	uniqueConstraints = {
-		@UniqueConstraint(name = GnMsgSrvConnModel.UK01, columnNames = {"env", "sol_nm", "host", "port"})
+		@UniqueConstraint(name = GsMsgSrvConnModel.UK01, columnNames = {"env", "sol_nm", "host", "port"})
 	}
 )
 @Getter
@@ -31,7 +31,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Audited    // History 자동 생성을 위함
-public class GnMsgSrvConnModel extends BaseModel {
+public class GsMsgSrvConnModel extends BaseModel {
 	public static final String UK01 = "uk_msg_srv_conn_01";
 
 	@Enumerated(EnumType.STRING)
