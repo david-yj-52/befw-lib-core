@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.interfaces;
+package com.tsh.starter.befw.lib.core.interfaces.rest;
 
 import java.util.List;
 import java.util.stream.Collectors;
