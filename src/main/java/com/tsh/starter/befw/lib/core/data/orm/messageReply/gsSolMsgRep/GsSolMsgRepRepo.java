@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm.messageReply.gnSolMsgRep;
+package com.tsh.starter.befw.lib.core.data.orm.messageReply.gsSolMsgRep;
 
 import org.springframework.stereotype.Repository;
 

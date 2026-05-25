@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.solacesystems.jcsmp.JCSMPSession;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
 import com.tsh.starter.befw.lib.core.data.constant.UseYn;
-import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn.GsMsgSrvConnModel;
+import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gsMsgSrvConn.GsMsgSrvConnModel;
 import com.tsh.starter.befw.lib.core.messaging.AbstractMessageSessionManager;
 import com.tsh.starter.befw.lib.core.messaging.MessagingConfManager;
 

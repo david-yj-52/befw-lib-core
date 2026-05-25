@@ -5,7 +5,7 @@ import com.solacesystems.jcsmp.JCSMPProperties;
 import com.tsh.starter.befw.lib.core.apService.util.DateTimeUtil;
 import com.tsh.starter.befw.lib.core.apService.util.ServerNameUtil;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
-import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn.GsMsgSrvConnModel;
+import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gsMsgSrvConn.GsMsgSrvConnModel;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

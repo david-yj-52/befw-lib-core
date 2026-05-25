@@ -3,7 +3,7 @@ package com.tsh.starter.befw.lib.core.messaging.kafka;
 import java.util.List;
 
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
-import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn.GsMsgSrvConnModel;
+import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gsMsgSrvConn.GsMsgSrvConnModel;
 import com.tsh.starter.befw.lib.core.messaging.AbstractMessageSessionManager;
 
 import lombok.extern.slf4j.Slf4j;

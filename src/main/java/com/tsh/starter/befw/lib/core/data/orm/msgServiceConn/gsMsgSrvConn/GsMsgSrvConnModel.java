@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gnMsgSrvConn;
+package com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gsMsgSrvConn;
 
 import org.hibernate.envers.Audited;
 

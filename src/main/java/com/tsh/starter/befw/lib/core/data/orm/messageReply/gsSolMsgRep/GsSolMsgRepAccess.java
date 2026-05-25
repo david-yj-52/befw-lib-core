@@ -1,4 +1,4 @@
-package com.tsh.starter.befw.lib.core.data.orm.messageReply.gnSolMsgRep;
+package com.tsh.starter.befw.lib.core.data.orm.messageReply.gsSolMsgRep;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
