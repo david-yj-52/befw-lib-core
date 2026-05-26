@@ -1,5 +1,6 @@
 package com.tsh.starter.befw.lib.core.data.orm.usersAndPermissions.gsUser;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,10 @@ public class GsUserAccess extends AbstractCrudService<GsUserModel, String> {
 
 	public Optional<GsUserModel> findByEmail(String email) {
 		return repo.findByEmail(email);
+	}
+
+	public List<GsUserModel> findAllById(List<String> ids) {
+		return repo.findAllById(ids);
 	}
 
 }
