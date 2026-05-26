@@ -1,5 +1,7 @@
 package com.tsh.starter.befw.lib.core.data.orm.usersAndPermissions.gsUser;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,10 @@ public class GsUserAccess extends AbstractCrudService<GsUserModel, String> {
 	@Override
 	protected BaseJpaRepository<GsUserModel, String> getRepository() {
 		return repo;
+	}
+
+	public Optional<GsUserModel> findByEmail(String email) {
+		return repo.findByEmail(email);
 	}
 
 }

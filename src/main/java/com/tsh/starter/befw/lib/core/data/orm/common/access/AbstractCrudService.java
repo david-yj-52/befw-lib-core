@@ -71,6 +71,16 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 	}
 
 	@Override
+	public java.util.Optional<M> findByIdOptional(ID id) {
+		try {
+			enableTenantFilter();
+			return getRepository().findById(id);
+		} catch (Exception e) {
+			return java.util.Optional.empty();
+		}
+	}
+
+	@Override
 	public List<M> findAll(String tenant) {
 		try {
 			enableTenantFilter();
@@ -155,6 +165,17 @@ public abstract class AbstractCrudService<M extends BaseModel, ID>
 			return getRepository().save(model);
 		} catch (Exception e) {
 			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), id, "update");
+			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
+		}
+	}
+
+	@Override
+	@Transactional
+	public M save(M model) {
+		try {
+			return getRepository().save(model);
+		} catch (Exception e) {
+			DataErrorResponse response = jpaExceptionHandler.handle(e, getEntityName(), model, "save");
 			throw new RuntimeException(response.getErrorCode() + ": " + response.getMessage(), e);
 		}
 	}

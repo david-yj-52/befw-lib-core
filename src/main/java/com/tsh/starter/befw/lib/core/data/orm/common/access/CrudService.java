@@ -15,9 +15,13 @@ public interface CrudService<T, ID> {
 
 	T findById(ID id);
 
+	java.util.Optional<T> findByIdOptional(ID id);
+
 	T create(T model);
 
 	T update(ID id, T model);
+
+	T save(T model);
 
 	void delete(ID id);
 }

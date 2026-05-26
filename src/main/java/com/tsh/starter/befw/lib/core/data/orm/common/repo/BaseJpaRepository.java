@@ -5,13 +5,14 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.tsh.starter.befw.lib.core.data.constant.UseStatCd;
 
 @NoRepositoryBean
-public interface BaseJpaRepository<M, ID> extends JpaRepository<M, ID> {
+public interface BaseJpaRepository<M, ID> extends JpaRepository<M, ID>, JpaSpecificationExecutor<M> {
 
 	List<M> findByTenantAndUseStatCd(String tenant, UseStatCd useStatCd);
 
