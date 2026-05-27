@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.tsh.starter.befw.lib.core.data.orm.common.access.AbstractCrudService;
@@ -29,6 +30,10 @@ public class GsUserAccess extends AbstractCrudService<GsUserModel, String> {
 
 	public List<GsUserModel> findAllById(List<String> ids) {
 		return repo.findAllById(ids);
+	}
+
+	public List<GsUserModel> searchByKeyword(String keyword) {
+		return repo.searchByKeyword(keyword, PageRequest.of(0, 10));
 	}
 
 }
