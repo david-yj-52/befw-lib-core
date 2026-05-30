@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.solacesystems.jcsmp.JCSMPSession;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
+import com.tsh.starter.befw.lib.core.config.MessagingProperties;
 import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
 import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gsMsgSrvConn.GsMsgSrvConnAccess;
 import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gsMsgSrvConn.GsMsgSrvConnModel;
@@ -33,20 +34,25 @@ public class MessagingConfManager {
 	@Getter
 	KafkaSessionManager kafkaSessionManager;
 
+	@Autowired
+	MessagingProperties messagingProperties;
+
 	@PostConstruct
 	public void init() {
 
 		log.info("groupId: {}, service:{}, version:{}", ApplicationProperties.getApplicationModuleName(),
 			ApplicationProperties.getApplicationServiceName(), ApplicationProperties.getApplicationVersion());
 
-		List<GsMsgSrvConnModel> msgServerInfos = this.fetchMsgServerList();
+		if (Boolean.parseBoolean(messagingProperties.getSolaceEnable())) {
+			List<GsMsgSrvConnModel> msgServerInfos = this.fetchMsgServerList();
 
-		if (msgServerInfos == null || msgServerInfos.isEmpty()) {
-			throw new NullPointerException("Not found messaging server info");
+			if (msgServerInfos == null || msgServerInfos.isEmpty()) {
+				throw new NullPointerException("Not found messaging server info");
+			}
+
+			this.setKafkaManage(msgServerInfos);
+			this.setSolaceManage(msgServerInfos);
 		}
-
-		this.setKafkaManage(msgServerInfos);
-		this.setSolaceManage(msgServerInfos);
 
 	}
 

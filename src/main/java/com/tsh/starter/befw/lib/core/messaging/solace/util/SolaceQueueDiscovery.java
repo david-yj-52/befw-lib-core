@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.solacesystems.jcsmp.JCSMPProperties;
+import com.tsh.starter.befw.lib.core.config.MessagingProperties;
 import com.tsh.starter.befw.lib.core.messaging.MessagingConfManager;
 import com.tsh.starter.befw.lib.core.messaging.solace.config.SolacePropertyHandler;
 
@@ -36,14 +37,19 @@ public class SolaceQueueDiscovery {
 	String sempCredential;
 	@Autowired
 	MessagingConfManager messagingConfManager;
+	@Autowired
+	MessagingProperties messagingProperties;
 	private SolacePropertyHandler propertyHandler;
 	private JCSMPProperties properties;
 
 	@PostConstruct
 	public void init() {
 
-		this.propertyHandler = this.messagingConfManager.getSolaceDefaultHandler().getPropertyHandler();
-		this.properties = this.messagingConfManager.getSolaceDefaultHandler().getPropertyHandler().getProperties();
+		if (Boolean.parseBoolean(messagingProperties.getSolaceEnable())) {
+
+			this.propertyHandler = this.messagingConfManager.getSolaceDefaultHandler().getPropertyHandler();
+			this.properties = this.messagingConfManager.getSolaceDefaultHandler().getPropertyHandler().getProperties();
+		}
 
 	}
 

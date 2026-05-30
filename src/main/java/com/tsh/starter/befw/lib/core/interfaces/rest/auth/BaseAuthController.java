@@ -38,10 +38,10 @@ public abstract class BaseAuthController {
 		preLogin(request);
 		LoginResponse loginResponse = authService.login(request);
 		setRefreshTokenCookie(response, loginResponse.getRefreshToken());
-		
+
 		// Remove refreshToken from body as it's in cookie
 		loginResponse.setRefreshToken(null);
-		
+
 		postLogin(request, loginResponse);
 		return ApiResponse.ok(loginResponse);
 	}
@@ -54,9 +54,9 @@ public abstract class BaseAuthController {
 		String refreshToken = getRefreshTokenFromCookie(request);
 		LoginResponse loginResponse = authService.refresh(refreshToken);
 		setRefreshTokenCookie(response, loginResponse.getRefreshToken());
-		
+
 		loginResponse.setRefreshToken(null);
-		
+
 		return ApiResponse.ok(loginResponse);
 	}
 
@@ -71,10 +71,17 @@ public abstract class BaseAuthController {
 		return ApiResponse.noContent();
 	}
 
-	protected void preRegister(RegisterRequest request) {}
-	protected void postRegister(RegisterRequest request) {}
-	protected void preLogin(LoginRequest request) {}
-	protected void postLogin(LoginRequest request, LoginResponse response) {}
+	protected void preRegister(RegisterRequest request) {
+	}
+
+	protected void postRegister(RegisterRequest request) {
+	}
+
+	protected void preLogin(LoginRequest request) {
+	}
+
+	protected void postLogin(LoginRequest request, LoginResponse response) {
+	}
 
 	protected void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
 		Cookie cookie = new Cookie("refreshToken", refreshToken);
