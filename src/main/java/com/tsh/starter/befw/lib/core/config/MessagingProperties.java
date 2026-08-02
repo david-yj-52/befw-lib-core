@@ -33,4 +33,16 @@ public class MessagingProperties {
 	@Value("${application.messaging.enable.kafka.sub}")
 	public String kafkaSubEnable;
 
+	@Getter
+	@Value("${application.messaging.enable.rabbitmq.enable}")
+	public String rabbitMqEnable;
+
+	@Getter
+	@Value("${application.messaging.enable.rabbitmq.pub}")
+	public String rabbitMqPubEnable;
+
+	@Getter
+	@Value("${application.messaging.enable.rabbitmq.sub}")
+	public String rabbitMqSubEnable;
+
 }

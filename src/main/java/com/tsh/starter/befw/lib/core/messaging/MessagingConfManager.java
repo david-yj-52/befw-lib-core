@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.rabbitmq.client.Connection;
 import com.solacesystems.jcsmp.JCSMPSession;
 import com.tsh.starter.befw.lib.core.config.ApplicationProperties;
 import com.tsh.starter.befw.lib.core.config.MessagingProperties;
@@ -12,6 +13,8 @@ import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
 import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gsMsgSrvConn.GsMsgSrvConnAccess;
 import com.tsh.starter.befw.lib.core.data.orm.msgServiceConn.gsMsgSrvConn.GsMsgSrvConnModel;
 import com.tsh.starter.befw.lib.core.messaging.kafka.KafkaSessionManager;
+import com.tsh.starter.befw.lib.core.messaging.rabbitmq.config.RabbitMqSessionHandler;
+import com.tsh.starter.befw.lib.core.messaging.rabbitmq.config.RabbitMqSessionManager;
 import com.tsh.starter.befw.lib.core.messaging.solace.config.SolaceSessionHandler;
 import com.tsh.starter.befw.lib.core.messaging.solace.config.SolaceSessionManager;
 
@@ -34,6 +37,9 @@ public class MessagingConfManager {
 	@Getter
 	KafkaSessionManager kafkaSessionManager;
 
+	@Getter
+	RabbitMqSessionManager rabbitMqSessionManager;
+
 	@Autowired
 	MessagingProperties messagingProperties;
 
@@ -52,6 +58,7 @@ public class MessagingConfManager {
 
 			this.setKafkaManage(msgServerInfos);
 			this.setSolaceManage(msgServerInfos);
+			this.setRabbitMqManage(msgServerInfos);
 		}
 
 	}
@@ -71,6 +78,20 @@ public class MessagingConfManager {
 		;
 		SolaceSessionHandler handler = this.solaceSessionManager.getHandler(DEFAULT_KEY);
 		return handler;
+	}
+
+	public Connection getRabbitMqDefaultConnection() {
+		if (rabbitMqSessionManager == null) {
+			throw new NullPointerException("RabbitMq Manager not initialized.");
+		}
+		return rabbitMqSessionManager.getConnection(DEFAULT_KEY);
+	}
+
+	public RabbitMqSessionHandler getRabbitMqDefaultHandler() {
+		if (rabbitMqSessionManager == null) {
+			throw new NullPointerException("RabbitMq Manager not initialized.");
+		}
+		return this.rabbitMqSessionManager.getHandler(DEFAULT_KEY);
 	}
 
 	private List<GsMsgSrvConnModel> fetchMsgServerList() {
@@ -96,5 +117,14 @@ public class MessagingConfManager {
 			.filter(m -> m.getSolNm() == MessagingSolutionType.Kafka)
 			.toList();
 		this.kafkaSessionManager = new KafkaSessionManager(kafkaList);
+	}
+
+	private void setRabbitMqManage(List<GsMsgSrvConnModel> infos) {
+
+		List<GsMsgSrvConnModel> rabbitMqList = infos.stream()
+			.filter(m -> m.getSolNm() == MessagingSolutionType.RabbitMq)
+			.toList();
+
+		this.rabbitMqSessionManager = new RabbitMqSessionManager(rabbitMqList);
 	}
 }

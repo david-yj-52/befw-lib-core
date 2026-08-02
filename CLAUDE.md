@@ -93,26 +93,39 @@ graph TD
 graph LR
     MC[MessagingConfManager] --> SM[SolaceSessionManager]
     MC --> KM[KafkaSessionManager]
+    MC --> RM[RabbitMqSessionManager]
     SM --> SH[SolaceSessionHandler]
     SH --> SP[SolacePropertyHandler]
     SM -->|세션 풀| JS[JCSMPSession]
+    RM --> RH[RabbitMqSessionHandler]
+    RH --> RP[RabbitMqPropertyHandler]
+    RM -->|세션 풀| RC[Connection]
 ```
 
-| 클래스                             | 역할                                                          |
-|---------------------------------|-------------------------------------------------------------|
-| `MessagingConfManager`          | `@PostConstruct` 시점에 DB에서 메시징 서버 정보 로드, Solace·Kafka 세션 초기화 |
-| `AbstractMessageSessionManager` | 세션 생명주기 추상화 (`startSession`, `stopSession`, `checkSession`) |
-| `SolaceSessionManager`          | Solace 세션 풀 관리 (`DEFAULT` 키 기반 ConcurrentHashMap)           |
-| `SolaceSessionHandler`          | 단일 Solace 연결 핸들러                                            |
-| `SolacePropertyHandler`         | DB 모델 → Solace 연결 속성 변환                                     |
-| `SolaceInboundManager`          | 큐 구독 플로우 관리                                                 |
-| `SolaceInboundGateway`          | 인바운드 게이트웨이 추상                                               |
-| `SolaceMessageReceiver`         | 구독 콜백 인터페이스                                                 |
-| `SolaceMessagePublisher`        | Topic 발행 (`publishToTopic`)                                 |
-| `SolacePublishCallback`         | 발행 콜백 처리                                                    |
-| `SolaceQueueDiscovery`          | 큐 패턴 기반 자동 탐색 (`findQueuesByPattern`)                       |
-| `SolaceOutBoundMessage`         | 발신 메시지 VO                                                   |
-| `KafkaSessionManager`           | Kafka 세션 관리 (골격만 구현)                                        |
+| 클래스                             | 역할                                                                |
+|---------------------------------|-------------------------------------------------------------------|
+| `MessagingConfManager`          | `@PostConstruct` 시점에 DB에서 메시징 서버 정보 로드, Solace·Kafka·RabbitMQ 세션 초기화 |
+| `AbstractMessageSessionManager` | 세션 생명주기 추상화 (`startSession`, `stopSession`, `checkSession`)       |
+| `SolaceSessionManager`          | Solace 세션 풀 관리 (`DEFAULT` 키 기반 ConcurrentHashMap)                 |
+| `SolaceSessionHandler`          | 단일 Solace 연결 핸들러                                                  |
+| `SolacePropertyHandler`         | DB 모델 → Solace 연결 속성 변환                                           |
+| `SolaceInboundManager`          | 큐 구독 플로우 관리                                                       |
+| `SolaceInboundGateway`          | 인바운드 게이트웨이 추상                                                     |
+| `SolaceMessageReceiver`         | 구독 콜백 인터페이스                                                       |
+| `SolaceMessagePublisher`        | Topic 발행 (`publishToTopic`)                                       |
+| `SolacePublishCallback`         | 발행 콜백 처리                                                          |
+| `SolaceQueueDiscovery`          | 큐 패턴 기반 자동 탐색 (`findQueuesByPattern`)                             |
+| `SolaceOutBoundMessage`         | 발신 메시지 VO                                                         |
+| `KafkaSessionManager`           | Kafka 세션 관리 (골격만 구현)                                              |
+| `RabbitMqSessionManager`        | RabbitMQ 세션 풀 관리 (`DEFAULT` 키 기반 ConcurrentHashMap)               |
+| `RabbitMqSessionHandler`        | 단일 RabbitMQ Connection/Channel 핸들러                                |
+| `RabbitMqPropertyHandler`       | DB 모델 → RabbitMQ `ConnectionFactory` 변환                           |
+| `RabbitMqInboundManager`        | 큐 구독 Consumer 자동 등록                                               |
+| `RabbitMqInboundGateway`        | 인바운드 게이트웨이 (Queue별 전용 Channel + Consumer 관리)                     |
+| `RabbitMqMessageReceiver`       | 구독 콜백 인터페이스                                                       |
+| `RabbitMqMessagePublisher`      | Queue 발행(`publishToQueue`, Publisher Confirm 기반 재시도/DLQ) · Exchange 발행(`publishToTopic`) |
+| `RabbitMqPublishCallback`       | Publisher Confirm(ACK/NACK) 콜백 처리                                 |
+| `RabbitMqOutBoundMessage`       | 발신 메시지 VO                                                         |
 
 **세션 키 규칙**
 
@@ -169,7 +182,7 @@ graph LR
 
 | Enum                    | 값                             |
 |-------------------------|-------------------------------|
-| `MessagingSolutionType` | `Solace`, `Kafka`             |
+| `MessagingSolutionType` | `Solace`, `Kafka`, `RabbitMq`  |
 | `UseYn`                 | `Y`, `N`                      |
 | `UseStatCd`             | `Usable`, `Disabled` 등        |
 | `MsgRepStatCd`          | `Start`, `Complete`, `Fail` 등 |
@@ -179,7 +192,7 @@ graph LR
 | 클래스                     | 역할                                                                                           |
 |-------------------------|----------------------------------------------------------------------------------------------|
 | `ApplicationProperties` | `application.yml` 값을 static 필드로 노출 (`tenant`, `moduleName`, `version`, `serviceName`, `env`) |
-| `MessagingProperties`   | Solace 연결 속성 바인딩                                                                             |
+| `MessagingProperties`   | Solace·Kafka·RabbitMQ enable/pub/sub 플래그 바인딩                                                 |
 | `SwaggerConfig`         | SpringDoc OpenAPI 설정                                                                         |
 | `JpaConfig`             | JPA·Envers 설정                                                                                |
 
