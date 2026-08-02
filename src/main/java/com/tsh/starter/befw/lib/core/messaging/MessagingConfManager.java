@@ -49,16 +49,28 @@ public class MessagingConfManager {
 		log.info("groupId: {}, service:{}, version:{}", ApplicationProperties.getApplicationModuleName(),
 			ApplicationProperties.getApplicationServiceName(), ApplicationProperties.getApplicationVersion());
 
-		if (Boolean.parseBoolean(messagingProperties.getSolaceEnable())) {
+		boolean solaceEnabled = Boolean.parseBoolean(messagingProperties.getSolaceEnable());
+		boolean kafkaEnabled = Boolean.parseBoolean(messagingProperties.getKafkaEnable());
+		boolean rabbitMqEnabled = Boolean.parseBoolean(messagingProperties.getRabbitMqEnable());
+
+		// NOTE 기존에는 solaceEnable 플래그 하나로 kafka까지 함께 초기화되던 구조였습니다.
+		// rabbitmq를 solace 없이 단독으로 사용할 수 있도록 활성화된 솔루션이 하나라도 있으면 조회하도록 수정했습니다.
+		if (solaceEnabled || kafkaEnabled || rabbitMqEnabled) {
 			List<GsMsgSrvConnModel> msgServerInfos = this.fetchMsgServerList();
 
 			if (msgServerInfos == null || msgServerInfos.isEmpty()) {
 				throw new NullPointerException("Not found messaging server info");
 			}
 
-			this.setKafkaManage(msgServerInfos);
-			this.setSolaceManage(msgServerInfos);
-			this.setRabbitMqManage(msgServerInfos);
+			if (kafkaEnabled) {
+				this.setKafkaManage(msgServerInfos);
+			}
+			if (solaceEnabled) {
+				this.setSolaceManage(msgServerInfos);
+			}
+			if (rabbitMqEnabled) {
+				this.setRabbitMqManage(msgServerInfos);
+			}
 		}
 
 	}
