@@ -2,6 +2,7 @@ package com.tsh.starter.befw.lib.core.data.orm.common.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -15,10 +16,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@Audited
+@NoArgsConstructor
+@SuperBuilder
 public abstract class BasicAudit {
 
 	@Id

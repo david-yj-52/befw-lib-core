@@ -20,16 +20,33 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.12.6</version>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
-            <version>${kotlin.version}</version>
-            <scope>test</scope>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.12.6</version>
+            <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.12.6</version>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -46,5 +63,30 @@
         </plugins>
     </build>
 
+    <!--
+        befw-lib-core는 별도 GitHub 저장소라 로컬 relativePath(../pom.xml)로 parent를 찾을 수 없습니다.
+        CI(및 로컬 최초 빌드)에서 GitHub Packages에 배포된 befw parent pom을 내려받도록 등록합니다.
+    -->
+    <repositories>
+        <repository>
+            <id>github-befw</id>
+            <url>https://maven.pkg.github.com/david-yj-52/befw</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+
+    <!-- befw-lib-core 자체를 GitHub Packages에 배포합니다. -->
+    <distributionManagement>
+        <repository>
+            <id>github-lib-core</id>
+            <name>GitHub Packages - befw-lib-core</name>
+            <url>https://maven.pkg.github.com/david-yj-52/befw-lib-core</url>
+        </repository>
+    </distributionManagement>
 
 </project>
