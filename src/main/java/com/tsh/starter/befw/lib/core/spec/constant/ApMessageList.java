@@ -8,4 +8,5 @@ public enum ApMessageList {
 	HealthCheckRep,
 	HealthCheckTriggerReq,
 	HealthCheckTriggerRep,
+	MOS_CARR_MOVE_COMP
 }
