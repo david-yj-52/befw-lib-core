@@ -1,5 +1,7 @@
 package com.tsh.starter.befw.lib.core.spec.constant;
 
+import com.tsh.starter.befw.lib.core.ApMessage;
+
 public enum ApMessageList {
 
 	InitializeData,
@@ -8,5 +10,5 @@ public enum ApMessageList {
 	HealthCheckRep,
 	HealthCheckTriggerReq,
 	HealthCheckTriggerRep,
-	MOS_CARR_MOVE_COMP
+
 }
