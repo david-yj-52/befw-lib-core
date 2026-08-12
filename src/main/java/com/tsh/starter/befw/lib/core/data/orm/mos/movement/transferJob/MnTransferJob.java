@@ -2,6 +2,7 @@ package com.tsh.starter.befw.lib.core.data.orm.mos.movement.transferJob;
 
 import org.hibernate.envers.Audited;
 
+import com.tsh.starter.befw.lib.core.constant.GlobalTableName;
 import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
 import com.tsh.starter.befw.lib.core.data.orm.mos.movement.common.LocationVo;
 
@@ -19,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(
-	name = "MN_TRANSFER_JOB",
+	name = GlobalTableName.MN_TRANSFER_JOB,
 	uniqueConstraints = {
 		@UniqueConstraint(name = MnTransferJob.UK01, columnNames = {"env", "sol_nm", "host", "port"})
 	}
