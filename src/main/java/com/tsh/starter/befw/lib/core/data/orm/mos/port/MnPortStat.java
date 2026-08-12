@@ -1,16 +1,19 @@
 package com.tsh.starter.befw.lib.core.data.orm.mos.port;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.envers.Audited;
+
 import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
-import com.tsh.starter.befw.lib.core.data.orm.mos.movement.common.LocationVo;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.checkerframework.checker.units.qual.C;
-import org.hibernate.envers.Audited;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -43,10 +46,7 @@ public class MnPortStat extends BaseModel {
 	@Column(name = "LOAD_TM")
 	private LocalDateTime loadTm;
 
-
 	@Column(name = "UN_LOAD_TM")
 	private LocalDateTime unLoadTm;
-
-
 
 }

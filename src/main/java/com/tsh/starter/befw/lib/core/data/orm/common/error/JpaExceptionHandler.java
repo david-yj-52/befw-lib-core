@@ -1,14 +1,15 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.error;
 
-import com.tsh.starter.befw.lib.core.data.orm.common.exception.TenantMissingException;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Component;
 
+import com.tsh.starter.befw.lib.core.data.orm.common.exception.TenantMissingException;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.dao.OptimisticLockingFailureException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -19,7 +20,7 @@ public class JpaExceptionHandler {
 
 	public DataErrorResponse handle(Exception e, String entityName, Object params, String query) {
 		if (e instanceof OptimisticLockingFailureException) {
-			return handleWithRetry((OptimisticLockingFailureException) e, entityName, params, query);
+			return handleWithRetry((OptimisticLockingFailureException)e, entityName, params, query);
 		}
 
 		DataErrorCode code = resolveCode(e);

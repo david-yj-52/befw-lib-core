@@ -1,15 +1,21 @@
 package com.tsh.starter.befw.lib.core.data.orm.mos.movement.transferJob;
 
-import com.tsh.starter.befw.lib.core.data.constant.UseYn;
+import org.hibernate.envers.Audited;
+
 import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
 import com.tsh.starter.befw.lib.core.data.orm.mos.movement.common.LocationVo;
-import jakarta.persistence.*;
-import lombok.Builder;
+
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.envers.Audited;
 
 @Entity
 @Table(
@@ -46,26 +52,23 @@ public class MnTransferJob extends BaseModel {
 
 	@Embedded
 	@AttributeOverrides({
-			@AttributeOverride(name = "eqpId", column = @Column(name = "FROM_EQP_ID")),
-			@AttributeOverride(name = "portId", column = @Column(name = "FROM_PORT_ID"))
+		@AttributeOverride(name = "eqpId", column = @Column(name = "FROM_EQP_ID")),
+		@AttributeOverride(name = "portId", column = @Column(name = "FROM_PORT_ID"))
 	})
 	private LocationVo fromLocInf;
 
-
 	@Embedded
 	@AttributeOverrides({
-			@AttributeOverride(name = "eqpId", column = @Column(name = "TO_EQP_ID")),
-			@AttributeOverride(name = "portId", column = @Column(name = "TO_PORT_ID"))
+		@AttributeOverride(name = "eqpId", column = @Column(name = "TO_EQP_ID")),
+		@AttributeOverride(name = "portId", column = @Column(name = "TO_PORT_ID"))
 	})
 	private LocationVo toLocInf;
 
 	@Embedded
 	@AttributeOverrides({
-			@AttributeOverride(name = "eqpId", column = @Column(name = "CRNT_EQP_ID")),
-			@AttributeOverride(name = "portId", column = @Column(name = "CRNT_PORT_ID"))
+		@AttributeOverride(name = "eqpId", column = @Column(name = "CRNT_EQP_ID")),
+		@AttributeOverride(name = "portId", column = @Column(name = "CRNT_PORT_ID"))
 	})
 	private LocationVo crntLocInf;
-
-
 
 }

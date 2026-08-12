@@ -13,12 +13,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
+	private static final String REFRESH_TOKEN_PREFIX = "refresh_token:";
 	private final StringRedisTemplate redisTemplate;
-
 	@Value("${application.security.jwt.refresh-token.expiration}")
 	private long refreshTokenExpiration;
-
-	private static final String REFRESH_TOKEN_PREFIX = "refresh_token:";
 
 	public void saveRefreshToken(String token, String userId) {
 		redisTemplate.opsForValue().set(

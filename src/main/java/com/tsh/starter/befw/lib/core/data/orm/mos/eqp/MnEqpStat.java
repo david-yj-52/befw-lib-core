@@ -1,6 +1,9 @@
 package com.tsh.starter.befw.lib.core.data.orm.mos.eqp;
 
+import org.hibernate.envers.Audited;
+
 import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -9,9 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.envers.Audited;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -34,8 +34,5 @@ public class MnEqpStat extends BaseModel {
 	// TODO 추후 ENUM화
 	@Column(name = "EQP_STAT")
 	private String eqpStat;
-
-
-
 
 }

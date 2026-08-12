@@ -2,10 +2,9 @@ package com.tsh.starter.befw.lib.core.spec.in;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tsh.starter.befw.lib.core.ApMessage;
-import com.tsh.starter.befw.lib.core.data.constant.MessagingSolutionType;
-import com.tsh.starter.befw.lib.core.data.constant.UseYn;
 import com.tsh.starter.befw.lib.core.spec.ApMessageBody;
 import com.tsh.starter.befw.lib.core.spec.constant.ApMessageList;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

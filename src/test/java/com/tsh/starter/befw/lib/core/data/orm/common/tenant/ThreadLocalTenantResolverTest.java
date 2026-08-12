@@ -1,11 +1,11 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.tenant;
 
-import com.tsh.starter.befw.lib.core.data.orm.common.exception.TenantMissingException;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import com.tsh.starter.befw.lib.core.data.orm.common.exception.TenantMissingException;
 
 class ThreadLocalTenantResolverTest {
 

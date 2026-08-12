@@ -1,10 +1,8 @@
 package com.tsh.starter.befw.lib.core.apService.auth;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
@@ -80,7 +78,8 @@ class AuthServiceTest {
 		when(userDetailsService.loadUserByUsername(any())).thenReturn(
 			User.builder().username("test@example.com").password("pwd").authorities("ROLE_USER").build()
 		);
-		when(userRepo.findByEmail(any())).thenReturn(Optional.of(GsUserModel.builder().objId("user123").email("test@example.com").build()));
+		when(userRepo.findByEmail(any())).thenReturn(
+			Optional.of(GsUserModel.builder().objId("user123").email("test@example.com").build()));
 		when(jwtService.generateAccessToken(any())).thenReturn("accessToken");
 		when(jwtService.generateRefreshToken()).thenReturn("refreshToken");
 

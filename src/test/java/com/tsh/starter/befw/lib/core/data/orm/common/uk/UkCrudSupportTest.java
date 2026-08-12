@@ -1,7 +1,21 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.uk;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.tsh.starter.befw.lib.core.data.constant.UseStatCd;
 import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
@@ -15,21 +29,6 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.Getter;
 import lombok.Setter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UkCrudSupportTest {
@@ -45,35 +44,6 @@ class UkCrudSupportTest {
 	}
 
 	// ── 테스트용 엔티티 ──────────────────────────────────────────────────────
-
-	@Entity
-	@Table(
-		name = "TEST_ENTITY",
-		uniqueConstraints = {
-			@UniqueConstraint(name = "uk_test", columnNames = {"COL_A", "COL_B"})
-		}
-	)
-	@Getter
-	@Setter
-	static class TestEntity extends BaseModel {
-		@Column(name = "COL_A")
-		private String colA;
-
-		@Column(name = "COL_B")
-		private String colB;
-
-		private String other;
-	}
-
-	@Entity
-	@Table(name = "NO_UK_ENTITY")
-	@Getter
-	@Setter
-	static class NoUkEntity extends BaseModel {
-		private String value;
-	}
-
-	// ── resolveUkColumns 테스트 ──────────────────────────────────────────────
 
 	@Test
 	void resolveUkColumns_returns_column_to_field_mapping() {
@@ -92,14 +62,14 @@ class UkCrudSupportTest {
 			.hasMessageContaining("no @UniqueConstraint");
 	}
 
+	// ── resolveUkColumns 테스트 ──────────────────────────────────────────────
+
 	@Test
 	void resolveUkColumns_throws_when_ukName_not_found() {
 		assertThatThrownBy(() -> support.resolveUkColumns(TestEntity.class, "uk_nonexistent"))
 			.isInstanceOf(IllegalArgumentException.class)
 			.hasMessageContaining("uk_nonexistent");
 	}
-
-	// ── findByUk 테스트 ──────────────────────────────────────────────────────
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -141,7 +111,7 @@ class UkCrudSupportTest {
 			.hasMessageContaining("COL_B");
 	}
 
-	// ── copyNonNullFields 테스트 ──────────────────────────────────────────────
+	// ── findByUk 테스트 ──────────────────────────────────────────────────────
 
 	@Test
 	void copyNonNullFields_copies_non_null_and_skips_uk_fields() {
@@ -179,7 +149,7 @@ class UkCrudSupportTest {
 		assertThat(target.getOther()).isEqualTo("origOther");
 	}
 
-	// ── Soft Delete 테스트 (동작 확인용) ──────────────────────────────────────
+	// ── copyNonNullFields 테스트 ──────────────────────────────────────────────
 
 	@Test
 	void soft_delete_uses_UseStatCd_Delete() {
@@ -189,6 +159,35 @@ class UkCrudSupportTest {
 		entity.setUseStatCd(UseStatCd.Delete);  // Soft Delete 적용
 
 		assertThat(entity.getUseStatCd()).isEqualTo(UseStatCd.Delete);
+	}
+
+	@Entity
+	@Table(
+		name = "TEST_ENTITY",
+		uniqueConstraints = {
+			@UniqueConstraint(name = "uk_test", columnNames = {"COL_A", "COL_B"})
+		}
+	)
+	@Getter
+	@Setter
+	static class TestEntity extends BaseModel {
+		@Column(name = "COL_A")
+		private String colA;
+
+		@Column(name = "COL_B")
+		private String colB;
+
+		private String other;
+	}
+
+	// ── Soft Delete 테스트 (동작 확인용) ──────────────────────────────────────
+
+	@Entity
+	@Table(name = "NO_UK_ENTITY")
+	@Getter
+	@Setter
+	static class NoUkEntity extends BaseModel {
+		private String value;
 	}
 
 }

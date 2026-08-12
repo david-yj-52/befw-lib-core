@@ -5,7 +5,6 @@ public enum UseStatCd {
 	UnUsable("Wrong data, Need to investigate"),
 	Delete("Ready to delete");
 
-
 	private final String description;
 
 	UseStatCd(String description) {

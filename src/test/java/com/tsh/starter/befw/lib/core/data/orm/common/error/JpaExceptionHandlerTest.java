@@ -1,15 +1,17 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.error;
 
-import com.tsh.starter.befw.lib.core.data.orm.common.exception.TenantMissingException;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ConstraintViolationException;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.orm.jpa.JpaSystemException;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.tsh.starter.befw.lib.core.data.orm.common.exception.TenantMissingException;
+
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 
 class JpaExceptionHandlerTest {
 

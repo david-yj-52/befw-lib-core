@@ -1,6 +1,9 @@
 package com.tsh.starter.befw.lib.core.data.orm.mos.port;
 
+import org.hibernate.envers.Audited;
+
 import com.tsh.starter.befw.lib.core.data.orm.common.model.BaseModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -9,9 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.envers.Audited;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -37,7 +37,6 @@ public class MnPortDef extends BaseModel {
 	@Column(name = "CARR_ID")
 	private String carrId;
 
-
 	// TODO 추후 ENUM화
 	@Column(name = "CARR_TYP")
 	private String carrTyp;
@@ -45,6 +44,5 @@ public class MnPortDef extends BaseModel {
 	// TODO 추후 enum화
 	@Column(name = "PORT_TYP")
 	private String portTyp;
-
 
 }

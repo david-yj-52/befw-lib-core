@@ -1,5 +1,14 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.uk;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,15 +18,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class UkCrudSupport {
@@ -152,7 +152,9 @@ public class UkCrudSupport {
 			String fieldName = entry.getValue();
 			boolean found = params.containsKey(columnName)
 				|| params.containsKey(fieldName)
-				|| params.keySet().stream().anyMatch(k -> k.equalsIgnoreCase(columnName) || k.equalsIgnoreCase(fieldName));
+				|| params.keySet()
+				.stream()
+				.anyMatch(k -> k.equalsIgnoreCase(columnName) || k.equalsIgnoreCase(fieldName));
 			if (!found) {
 				throw new IllegalArgumentException(
 					"Missing UK param for column '" + columnName + "' (field: " + fieldName + ")");

@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 public class ThreadLocalTenantResolver implements TenantResolver {
 
 	@Override
-	public void setTenant(String tenant) {
-		TenantContext.set(tenant);
+	public String getTenant() {
+		return TenantContext.get();
 	}
 
 	@Override
-	public String getTenant() {
-		return TenantContext.get();
+	public void setTenant(String tenant) {
+		TenantContext.set(tenant);
 	}
 
 	@Override

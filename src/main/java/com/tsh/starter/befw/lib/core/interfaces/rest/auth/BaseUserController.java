@@ -31,7 +31,12 @@ public abstract class BaseUserController {
 		return ApiResponse.ok(response);
 	}
 
-	protected void postGetCurrentUser(UserResponse response) {}
-	protected void preUpdateProfile(UpdateProfileRequest request) {}
-	protected void postUpdateProfile(UpdateProfileRequest request, UserResponse response) {}
+	protected void postGetCurrentUser(UserResponse response) {
+	}
+
+	protected void preUpdateProfile(UpdateProfileRequest request) {
+	}
+
+	protected void postUpdateProfile(UpdateProfileRequest request, UserResponse response) {
+	}
 }

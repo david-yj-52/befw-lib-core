@@ -1,8 +1,6 @@
 package com.tsh.starter.befw.lib.core.apService.auth;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +15,8 @@ class JwtServiceTest {
 	@BeforeEach
 	void setUp() {
 		jwtService = new JwtService();
-		ReflectionTestUtils.setField(jwtService, "secretKey", "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970");
+		ReflectionTestUtils.setField(jwtService, "secretKey",
+			"404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970");
 		ReflectionTestUtils.setField(jwtService, "jwtExpiration", 900000L);
 	}
 

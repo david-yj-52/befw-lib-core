@@ -10,9 +10,9 @@ import lombok.Setter;
 @Embeddable
 public class LocationVo {
 
-    @Column(name = "EQP_ID")
-    private String eqpId;
+	@Column(name = "EQP_ID")
+	private String eqpId;
 
-    @Column(name = "PORT_ID")
-    private String portId;
+	@Column(name = "PORT_ID")
+	private String portId;
 }

@@ -1,9 +1,9 @@
 package com.tsh.starter.befw.lib.core.data.orm.common.error;
 
+import java.time.LocalDateTime;
+
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
